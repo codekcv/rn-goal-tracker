@@ -44,6 +44,10 @@ export default function GoalEdit() {
     });
   }
 
+  function handleDelete() {
+    goalsDispatch({ type: 'delete', id });
+  }
+
   return (
     <Modal visible={isSelected} animationType="slide">
       <View style={styles.container}>
@@ -91,7 +95,7 @@ export default function GoalEdit() {
           </View>
 
           <View style={styles.button}>
-            <Button title="Delete" onPress={handleSubmit} color="#b180f0" />
+            <Button title="Delete" onPress={handleDelete} color="#b180f0" />
           </View>
         </View>
       </View>

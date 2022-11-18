@@ -30,8 +30,8 @@ function goalsReducer(goals, action) {
         }
       });
     }
-    case 'deleted': {
-      return goals.filter((t) => t.id !== action.id);
+    case 'delete': {
+      return goals.filter((goal) => goal.id !== action.id);
     }
     default: {
       throw Error('Unknown action: ' + action.type);
