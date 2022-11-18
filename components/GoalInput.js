@@ -15,15 +15,15 @@ export default function GoalInput() {
   const { state, dispatch: appDispatch } = useApp();
   const [text, setText] = useState('');
 
-  const handleInput = (input) => {
+  function handleInput(input) {
     setText(input);
-  };
+  }
 
   function handleToggle() {
     appDispatch({ type: 'toggle-add-modal' });
   }
 
-  const handleSubmit = () => {
+  function handleSubmit() {
     dispatch({
       type: 'add',
       id: Math.random().toString(),
@@ -32,7 +32,7 @@ export default function GoalInput() {
 
     setText('');
     handleToggle();
-  };
+  }
 
   return (
     <Modal visible={state.isAdding} animationType="slide">

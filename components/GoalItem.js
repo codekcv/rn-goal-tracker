@@ -1,68 +1,42 @@
-import { useEffect, useMemo, useReducer } from 'react';
+import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { ItemContext } from '../contexts/ItemContext';
+import { useGoals } from '../contexts/GoalsContext';
 import GoalEdit from './GoalEdit';
 
-function goalReducer(state, action) {
-  switch (action.type) {
-    case 'update-item': {
-      return { ...state, item: action.value };
-    }
-    case 'toggle-selected': {
-      return { ...state, isSelected: !state.isSelected };
-    }
-    case 'toggle-editting': {
-      return { ...state, isEditting: !state.isEditting };
-    }
-    case 'edit': {
-      return { ...state, item: { ...state.item, text: action.value } };
-    }
-    default: {
-      throw Error('Unknown action: ' + action.type);
-    }
-  }
-}
-
 export default function GoalItem({ data }) {
-  const initialState = {
-    item: data.item,
-    isSelected: false,
-    isEditting: false,
-  };
+  const [isSelected, setIsSelected] = useState(false);
+  const { goals } = useGoals();
 
-  const [state, dispatch] = useReducer(goalReducer, initialState);
-  const contextValue = useMemo(() => ({ state, dispatch }), [state]);
+  const goal = goals.find((g) => g.id === data.item.id);
 
-  function handleToggle() {
-    dispatch({ type: 'toggle-selected' });
+  function handleIsSelected() {
+    setIsSelected((s) => !s);
   }
-
-  useEffect(() => {
-    dispatch({ type: 'update-item', value: data.item });
-  }, [data.item]);
 
   return (
-    <ItemContext.Provider value={contextValue}>
-      <View style={styles.goalItem}>
-        <GoalEdit />
+    <View style={styles.goalItem}>
+      <GoalEdit
+        goal={goal}
+        isSelected={isSelected}
+        handleIsSelected={handleIsSelected}
+      />
 
-        <Pressable
-          android_ripple={{ color: '#ddd' }}
-          // onPress={handleDelete.bind(this, data.item.id)}
-          onPress={handleToggle}
-          style={({ pressed }) => pressed && styles.pressedItem}
+      <Pressable
+        android_ripple={{ color: '#ddd' }}
+        // onPress={handleDelete.bind(this, data.item.id)}
+        onPress={handleIsSelected}
+        style={({ pressed }) => pressed && styles.pressedItem}
+      >
+        <Text
+          style={{
+            ...styles.goalText,
+            textDecorationLine: goal.done ? 'line-through' : 'none',
+          }}
         >
-          <Text
-            style={{
-              ...styles.goalText,
-              textDecorationLine: data.item.done ? 'line-through' : 'none',
-            }}
-          >
-            {`${data.index + 1}: ${data.item.text}`}{' '}
-          </Text>
-        </Pressable>
-      </View>
-    </ItemContext.Provider>
+          {`${data.index + 1}: ${goal.text}`}{' '}
+        </Text>
+      </Pressable>
+    </View>
   );
 }
 

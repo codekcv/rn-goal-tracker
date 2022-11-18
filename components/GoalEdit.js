@@ -1,25 +1,16 @@
 import { useState } from 'react';
 import { Button, Modal, StyleSheet, Text, TextInput, View } from 'react-native';
-import { useItem } from '../contexts/ItemContext';
 import { useGoals } from '../contexts/GoalsContext';
 
-export default function GoalEdit() {
-  const { dispatch, state } = useItem();
+export default function GoalEdit({ goal, isSelected, handleIsSelected }) {
+  const [isEditting, setIsEditting] = useState(false);
   const { dispatch: goalsDispatch } = useGoals();
-  const [editText, setEditText] = useState(state?.item?.text ?? '');
+  const [editText, setEditText] = useState(goal.text);
 
-  const { isSelected, isEditting } = state;
-
-  const {
-    item: { id, text, done },
-  } = state;
-
-  function handleToggle() {
-    dispatch({ type: 'toggle-selected' });
-  }
+  const { id, text, done } = goal;
 
   function handleEdit() {
-    dispatch({ type: 'toggle-editting' });
+    setIsEditting((e) => !e);
   }
 
   function handleTextChange(input) {
@@ -77,7 +68,7 @@ export default function GoalEdit() {
 
         <View style={styles.buttonContainer}>
           <View style={styles.button}>
-            <Button title="Cancel" color="#f31282" onPress={handleToggle} />
+            <Button title="Back" color="#f31282" onPress={handleIsSelected} />
           </View>
 
           <View style={styles.button}>
