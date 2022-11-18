@@ -1,13 +1,10 @@
 import { useState } from 'react';
 import { Pressable, StyleSheet, Text, View } from 'react-native';
-import { useGoals } from '../contexts/GoalsContext';
 import GoalEdit from './GoalEdit';
 
 export default function GoalItem({ data }) {
   const [isSelected, setIsSelected] = useState(false);
-  const { goals } = useGoals();
-
-  const goal = goals.find((g) => g.id === data.item.id);
+  const goal = data.item;
 
   function handleIsSelected() {
     setIsSelected((s) => !s);

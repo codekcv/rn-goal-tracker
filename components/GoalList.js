@@ -12,9 +12,7 @@ export default function GoalList() {
       <FlatList
         data={goals}
         keyExtractor={(item) => item.id}
-        renderItem={(itemData) => (
-          <GoalItem data={itemData} handleDelete={{}} />
-        )}
+        renderItem={(itemData) => <GoalItem data={itemData} />}
       />
     </View>
   );

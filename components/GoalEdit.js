@@ -4,8 +4,8 @@ import { useGoals } from '../contexts/GoalsContext';
 
 export default function GoalEdit({ goal, isSelected, handleIsSelected }) {
   const [isEditting, setIsEditting] = useState(false);
-  const { dispatch: goalsDispatch } = useGoals();
   const [editText, setEditText] = useState(goal.text);
+  const { dispatch } = useGoals();
 
   const { id, text, done } = goal;
 
@@ -18,7 +18,7 @@ export default function GoalEdit({ goal, isSelected, handleIsSelected }) {
   }
 
   function handleSubmit() {
-    goalsDispatch({
+    dispatch({
       type: 'edit',
       id,
       value: editText,
@@ -28,7 +28,7 @@ export default function GoalEdit({ goal, isSelected, handleIsSelected }) {
   }
 
   function handleDone() {
-    goalsDispatch({
+    dispatch({
       type: 'done',
       id,
       value: !done,
@@ -36,7 +36,7 @@ export default function GoalEdit({ goal, isSelected, handleIsSelected }) {
   }
 
   function handleDelete() {
-    goalsDispatch({ type: 'delete', id });
+    dispatch({ type: 'delete', id });
   }
 
   return (

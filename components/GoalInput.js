@@ -7,20 +7,14 @@ import {
   TextInput,
   View,
 } from 'react-native';
-import { useApp } from '../contexts/AppContext';
 import { useGoals } from '../contexts/GoalsContext';
 
-export default function GoalInput() {
+export default function GoalInput({ isAdding, handleToggle }) {
   const { dispatch } = useGoals();
-  const { state, dispatch: appDispatch } = useApp();
   const [text, setText] = useState('');
 
   function handleInput(input) {
     setText(input);
-  }
-
-  function handleToggle() {
-    appDispatch({ type: 'toggle-add-modal' });
   }
 
   function handleSubmit() {
@@ -35,7 +29,7 @@ export default function GoalInput() {
   }
 
   return (
-    <Modal visible={state.isAdding} animationType="slide">
+    <Modal visible={isAdding} animationType="slide">
       <View style={styles.inputContainer}>
         <Image
           style={styles.image}
