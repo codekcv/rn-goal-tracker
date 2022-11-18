@@ -1,16 +1,60 @@
-import { Button, Modal, StyleSheet, Text, View } from 'react-native';
+import { useState } from 'react';
+import { Button, Modal, StyleSheet, Text, TextInput, View } from 'react-native';
+import { useItem } from '../contexts/ItemContext';
+import { useGoals } from '../contexts/GoalsContext';
 
-export default function GoalEdit({ data, handleToggle, isOpen }) {
+export default function GoalEdit() {
+  const { dispatch, state } = useItem();
+  const { dispatch: goalsDispatch } = useGoals();
+  const [editText, setEditText] = useState(state?.item?.text ?? '');
+
+  const { isSelected, isEditting } = state;
+
   const {
-    item: { text },
-  } = data;
+    item: { id, text },
+  } = state;
 
-  function handleSubmit() {}
+  function handleToggle() {
+    dispatch({ type: 'toggle-selected' });
+  }
+
+  function handleEdit() {
+    dispatch({ type: 'toggle-editting' });
+  }
+
+  function handleTextChange(input) {
+    setEditText(input);
+  }
+
+  function handleSubmit() {
+    goalsDispatch({
+      type: 'edit',
+      id,
+      value: editText,
+    });
+
+    handleEdit();
+  }
 
   return (
-    <Modal visible={isOpen} animationType="slide">
+    <Modal visible={isSelected} animationType="slide">
       <View style={styles.container}>
-        <Text>{text}</Text>
+        <View>
+          {!isEditting ? (
+            <Text>{text}</Text>
+          ) : (
+            <View style={{ width: '100%' }}>
+              <TextInput
+                style={styles.textInput}
+                placeholder="Your course goal!"
+                onChangeText={handleTextChange}
+                value={editText}
+              />
+
+              <Button title="Submit" color="#f31282" onPress={handleSubmit} />
+            </View>
+          )}
+        </View>
 
         <View style={styles.buttonContainer}>
           <View style={styles.button}>
@@ -18,7 +62,7 @@ export default function GoalEdit({ data, handleToggle, isOpen }) {
           </View>
 
           <View style={styles.button}>
-            <Button title="Edit" onPress={handleSubmit} color="#b180f0" />
+            <Button title="Edit" onPress={handleEdit} color="#b180f0" />
           </View>
         </View>
 
@@ -42,6 +86,15 @@ const styles = StyleSheet.create({
     backgroundColor: '#311b6b',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  textInput: {
+    borderWidth: 1,
+    borderColor: '#e4d0ff',
+    backgroundColor: '#e4d0ff',
+    width: '100%',
+    padding: 16,
+    color: '#120438',
+    borderRadius: 6,
   },
   buttonContainer: {
     marginTop: 16,

@@ -2,7 +2,7 @@ import { createContext, useContext, useMemo, useReducer } from 'react';
 
 function goalsReducer(goals, action) {
   switch (action.type) {
-    case 'add': {
+    case 'add':
       return [
         ...goals,
         {
@@ -11,19 +11,16 @@ function goalsReducer(goals, action) {
           done: false,
         },
       ];
-    }
-    case 'edit': {
-      return goals.map((t) => {
-        if (t.id === action.task.id) {
-          return action.task;
+    case 'edit':
+      return goals.map((goal) => {
+        if (goal.id === action.id) {
+          return { ...goal, text: action.value };
         } else {
-          return t;
+          return goal;
         }
       });
-    }
-    case 'deleted': {
+    case 'deleted':
       return goals.filter((t) => t.id !== action.id);
-    }
     default: {
       throw Error('Unknown action: ' + action.type);
     }
