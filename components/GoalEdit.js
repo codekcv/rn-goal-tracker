@@ -11,7 +11,7 @@ export default function GoalEdit() {
   const { isSelected, isEditting } = state;
 
   const {
-    item: { id, text },
+    item: { id, text, done },
   } = state;
 
   function handleToggle() {
@@ -36,14 +36,29 @@ export default function GoalEdit() {
     handleEdit();
   }
 
+  function handleDone() {
+    goalsDispatch({
+      type: 'done',
+      id,
+      value: !done,
+    });
+  }
+
   return (
     <Modal visible={isSelected} animationType="slide">
       <View style={styles.container}>
         <View>
           {!isEditting ? (
-            <Text>{text}</Text>
+            <Text
+              style={{
+                ...styles.textInput,
+                textDecorationLine: done ? 'line-through' : 'none',
+              }}
+            >
+              {text}
+            </Text>
           ) : (
-            <View style={{ width: '100%' }}>
+            <View>
               <TextInput
                 style={styles.textInput}
                 placeholder="Your course goal!"
@@ -68,7 +83,11 @@ export default function GoalEdit() {
 
         <View style={styles.buttonContainer}>
           <View style={styles.button}>
-            <Button title="Done" onPress={handleSubmit} color="#b180f0" />
+            <Button
+              title={!done ? 'Done' : 'Undone'}
+              onPress={handleDone}
+              color="#b180f0"
+            />
           </View>
 
           <View style={styles.button}>

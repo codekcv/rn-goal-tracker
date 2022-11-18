@@ -2,10 +2,12 @@ import { createContext, useContext, useMemo, useReducer } from 'react';
 
 function stateReducer(state, action) {
   switch (action.type) {
-    case 'toggle-add-modal':
+    case 'toggle-add-modal': {
       return { ...state, isAdding: !state.isAdding };
-    case 'toggle-edit-modal':
+    }
+    case 'toggle-edit-modal': {
       return { ...state, isEditing: !state.isEditing, activeId: action.value };
+    }
     default: {
       throw Error('Unknown action: ' + action.type);
     }

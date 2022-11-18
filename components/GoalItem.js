@@ -5,18 +5,18 @@ import GoalEdit from './GoalEdit';
 
 function goalReducer(state, action) {
   switch (action.type) {
-    case 'update-item':
+    case 'update-item': {
       return { ...state, item: action.value };
-
-    case 'toggle-selected':
+    }
+    case 'toggle-selected': {
       return { ...state, isSelected: !state.isSelected };
-
-    case 'toggle-editting':
+    }
+    case 'toggle-editting': {
       return { ...state, isEditting: !state.isEditting };
-
-    case 'edit':
+    }
+    case 'edit': {
       return { ...state, item: { ...state.item, text: action.value } };
-
+    }
     default: {
       throw Error('Unknown action: ' + action.type);
     }
@@ -52,7 +52,12 @@ export default function GoalItem({ data }) {
           onPress={handleToggle}
           style={({ pressed }) => pressed && styles.pressedItem}
         >
-          <Text style={styles.goalText}>
+          <Text
+            style={{
+              ...styles.goalText,
+              textDecorationLine: data.item.done ? 'line-through' : 'none',
+            }}
+          >
             {`${data.index + 1}: ${data.item.text}`}{' '}
           </Text>
         </Pressable>
@@ -73,5 +78,6 @@ const styles = StyleSheet.create({
   goalText: {
     color: 'white',
     padding: 8,
+    textDecorationLine: 'line-through',
   },
 });
